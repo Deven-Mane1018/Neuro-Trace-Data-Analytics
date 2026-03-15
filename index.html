@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroTrace — Decoding Parkinson's Through Voice</title>
+  <meta name="description" content="A research-grade clinical analytics engine that predicts Parkinson's disease progression from vocal biomarkers. Seamedu Awards 2026 — Data Analytics Excellence." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 1 — HERO
+══════════════════════════════════════════════════════════ -->
+<section id="hero" class="section hero-section">
+  <div class="hero-inner">
+    <p class="hero-top-label mono">SEAMEDU AWARDS 2026 &middot; DATA ANALYTICS EXCELLENCE</p>
+
+    <h1 class="hero-heading">
+      <span class="hero-line1">NeuroTrace</span>
+      <span class="hero-line2">Decoding Parkinson's</span>
+      <span class="hero-line3">Through Voice.</span>
+    </h1>
+
+    <p class="hero-sub">
+      A research-grade clinical analytics engine that predicts disease progression
+      from vocal biomarkers — built entirely from data, math, and an undergraduate
+      who refused to think small.
+    </p>
+
+    <!-- Stat counters -->
+    <div class="stat-pills" aria-label="Project statistics">
+      <div class="stat-pill">
+        <span class="stat-number mono" data-target="5875" data-decimals="0" id="stat-patients">0</span>
+        <span class="stat-label">Patient Records</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number mono" data-target="16" data-decimals="0" id="stat-biomarkers">0</span>
+        <span class="stat-label">Vocal Biomarkers</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number mono" data-target="7" data-decimals="0" id="stat-layers">0</span>
+        <span class="stat-label">Analysis Layers</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number mono" data-target="0.78" data-decimals="2" id="stat-auc">0.00</span>
+        <span class="stat-label">EDI AUC Score</span>
+      </div>
+    </div>
+
+    <p class="hero-citation mono">Oxford Parkinson's Telemonitoring Dataset &middot; Little et al., 2009 &middot; UCI MLR</p>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-dot"></div>
+    </div>
+  </div>
+
+  <!-- Background grid -->
+  <div class="hero-grid" aria-hidden="true"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 2 — THE PROBLEM
+══════════════════════════════════════════════════════════ -->
+<section id="problem" class="section reveal">
+  <div class="container">
+    <div class="problem-cols">
+      <div class="problem-left">
+        <p class="problem-big-line">10 million people.</p>
+        <p class="problem-big-line">One brutally simple problem.</p>
+        <p class="problem-body">
+          Parkinson's Disease is the second most common neurodegenerative disorder
+          worldwide. Its gold-standard assessment — the UPDRS — requires a trained
+          neurologist in a clinical setting. In India, that's one neurologist for every
+          100,000 people. Between appointments, disease progresses unseen.
+        </p>
+      </div>
+
+      <div class="problem-right">
+        <div class="callout-card">
+          <span class="callout-number">60,000+</span>
+          <span class="callout-desc">New PD cases in India annually</span>
+        </div>
+        <div class="callout-card">
+          <span class="callout-number">1 : 100,000</span>
+          <span class="callout-desc">Neurologist-to-patient ratio in India</span>
+        </div>
+        <div class="callout-card">
+          <span class="callout-number">3–6 months</span>
+          <span class="callout-desc">Typical gap between UPDRS assessments</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="full-callout">
+      <span>NeuroTrace asks: what if a smartphone microphone could close that gap?</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 3 — DATASET & DOMAIN
+══════════════════════════════════════════════════════════ -->
+<section id="dataset" class="section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">The Data Foundation</h2>
+      <p class="section-subtitle">Real clinical research data. Not synthetic. Not simplified.</p>
+    </div>
+
+    <!-- Dataset card -->
+    <div class="dataset-card">
+      <div class="dataset-card-inner">
+        <p class="dataset-card-title mono">Oxford Parkinson's Telemonitoring Dataset</p>
+        <p class="dataset-card-authors">Little MA, McSharry PE, Hunter EJ et al.</p>
+        <p class="dataset-card-journal mono">IEEE Transactions on Biomedical Engineering, 2009</p>
+        <div class="dataset-meta-row">
+          <span class="dataset-meta-item">42 PD patients</span>
+          <span class="dataset-meta-sep">·</span>
+          <span class="dataset-meta-item">5,875 voice recordings</span>
+          <span class="dataset-meta-sep">·</span>
+          <span class="dataset-meta-item">6 months longitudinal</span>
+          <span class="dataset-meta-sep">·</span>
+          <span class="dataset-meta-item">22 acoustic features</span>
+          <span class="dataset-meta-sep">·</span>
+          <span class="dataset-meta-item">2 UPDRS targets</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Biomarker families -->
+    <div class="biomarker-families">
+
+      <div class="biomarker-family" data-tooltip="Micro-fluctuations in vocal fold vibration frequency. Each cycle-to-cycle deviation reflects involuntary laryngeal tremor — a hallmark of basal ganglia dysfunction in Parkinson's.">
+        <div class="family-header">
+          <span class="family-tag jitter-tag">JITTER FAMILY</span>
+          <span class="family-desc">Cycle-to-cycle frequency variation &middot; laryngeal tremor</span>
+        </div>
+        <div class="biomarker-pills">
+          <span class="bpill">Jit%</span>
+          <span class="bpill">JitA</span>
+          <span class="bpill">JitR</span>
+          <span class="bpill">JitP</span>
+          <span class="bpill">JitD</span>
+        </div>
+        <div class="family-tooltip">
+          <strong>Clinical meaning:</strong> Micro-fluctuations in vocal fold vibration frequency. Cycle-to-cycle deviations reflect involuntary laryngeal tremor — a hallmark of basal ganglia dysfunction. Jitter(%) consistently ranks #1 across all three feature importance methods.
+        </div>
+      </div>
+
+      <div class="biomarker-family" data-tooltip="Instability in the amplitude of vocal fold oscillation – reflects neuromuscular control degradation affecting breath support and phonation control.">
+        <div class="family-header">
+          <span class="family-tag shimmer-tag">SHIMMER FAMILY</span>
+          <span class="family-desc">Amplitude instability &middot; neuromuscular control degradation</span>
+        </div>
+        <div class="biomarker-pills">
+          <span class="bpill">Shim%</span>
+          <span class="bpill">ShimB</span>
+          <span class="bpill">SAQ3</span>
+          <span class="bpill">SAQ5</span>
+          <span class="bpill">SA11</span>
+          <span class="bpill">SDDA</span>
+        </div>
+        <div class="family-tooltip">
+          <strong>Clinical meaning:</strong> Instability in the amplitude of vocal fold oscillation. Reflects neuromuscular control degradation affecting breath support and phonation. Shimmer(%) shows novel fast-progressor elevation — an original NeuroTrace finding.
+        </div>
+      </div>
+
+      <div class="biomarker-family" data-tooltip="The ratio of harmonics to noise — quantifying breathiness, turbulent airflow, and the relative presence of structured vocal signal vs. aperiodic noise.">
+        <div class="family-header">
+          <span class="family-tag harmonic-tag">HARMONIC</span>
+          <span class="family-desc">Breathiness and turbulent airflow ratio</span>
+        </div>
+        <div class="biomarker-pills">
+          <span class="bpill">NHR</span>
+          <span class="bpill">HNR</span>
+        </div>
+        <div class="family-tooltip">
+          <strong>Clinical meaning:</strong> NHR and HNR quantify the ratio of harmonics to noise in the voice signal. HNR declines monotonically with PD severity, achieving Cohen's d = 0.89 — a large effect. Replicates Sakar et al. 2013.
+        </div>
+      </div>
+
+      <div class="biomarker-family" data-tooltip="Nonlinear dynamics and information-theoretic measures that capture the complex, irregular signal structure that simple statistics miss — encoding the deterministic chaos of dysphonic vocal production.">
+        <div class="family-header">
+          <span class="family-tag nonlinear-tag">NONLINEAR</span>
+          <span class="family-desc">Complex vocal dynamics &middot; nonlinear signal entropy</span>
+        </div>
+        <div class="biomarker-pills">
+          <span class="bpill">RPDE</span>
+          <span class="bpill">DFA</span>
+          <span class="bpill">PPE</span>
+        </div>
+        <div class="family-tooltip">
+          <strong>Clinical meaning:</strong> Nonlinear dynamics and entropy measures capture what jitter/shimmer miss. PPE escalates across all 3 disease stages (KW H=312.4, p&lt;0.001). Replicates Tsanas et al. 2010. PC1 explains 41.2% of total variance.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 4 — 7-LAYER PIPELINE
+══════════════════════════════════════════════════════════ -->
+<section id="pipeline" class="section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">7-Layer Research Pipeline</h2>
+      <p class="section-subtitle">Each layer builds on the last. Each decision is methodologically justified.</p>
+    </div>
+
+    <div class="pipeline-stepper">
+
+      <div class="pipeline-step" id="step-1">
+        <div class="step-header" onclick="toggleStep('step-1')">
+          <div class="step-number mono">01</div>
+          <div class="step-meta">
+            <h3 class="step-title">Advanced Data Engineering</h3>
+            <p class="step-summary mono">KNN imputation · IQR winsorisation [1%, 99%] · RobustScaler · disease staging</p>
+          </div>
+          <div class="step-chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="step-expanded">
+          <p class="step-detail">Before transforming anything, we audit. KNN imputation preserves inter-feature correlations. Winsorisation at 1–99th percentile keeps sample size intact — critical in clinical datasets where removing outliers removes real pathology. RobustScaler handles the heavy tails typical of bioacoustic data.</p>
+          <div class="tech-pills-row">
+            <span class="tech-pill cyan">KNNImputer</span>
+            <span class="tech-pill cyan">IQR Winsorisation</span>
+            <span class="tech-pill cyan">RobustScaler</span>
+            <span class="tech-pill cyan">Disease Staging</span>
+            <span class="tech-pill cyan">Audit Pipeline</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipeline-step" id="step-2">
+        <div class="step-header" onclick="toggleStep('step-2')">
+          <div class="step-number mono">02</div>
+          <div class="step-meta">
+            <h3 class="step-title">Longitudinal Trajectory Analysis</h3>
+            <p class="step-summary mono">Per-patient OLS regression · slope phenotyping · centroid curves</p>
+          </div>
+          <div class="step-chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="step-expanded">
+          <p class="step-detail">Every patient has a unique disease story. We fitted 42 individual OLS regressions to classify Fast (β₁ ≥ p66), Moderate, and Slow Progressors. Fast progressors accumulated 24.3 UPDRS units over 6 months vs 4.1 for slow — a 5.9× difference invisible in aggregate statistics. Most projects never look at the patient level.</p>
+          <div class="tech-pills-row">
+            <span class="tech-pill cyan">OLS Regression ×42</span>
+            <span class="tech-pill cyan">Slope Phenotyping</span>
+            <span class="tech-pill cyan">Centroid Curves</span>
+            <span class="tech-pill cyan">Percentile Thresholding</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipeline-step" id="step-3">
+        <div class="step-header" onclick="toggleStep('step-3')">
+          <div class="step-number mono">03</div>
+          <div class="step-meta">
+            <h3 class="step-title">Multi-Dimensional Correlation</h3>
+            <p class="step-summary mono">Pearson r · Spearman ρ · Kendall τ · partial correlation (age/sex controlled)</p>
+          </div>
+          <div class="step-chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="step-expanded">
+          <p class="step-detail">Three correlation methods computed simultaneously. Partial correlation controls for age and sex — because jitter correlates with age independently of PD. Uncontrolled correlations overstate biomarker utility and introduce confounding. Spearman ρ = 0.83 for Jitter(%) after Bonferroni correction replaces the naive r = 0.89.</p>
+          <div class="tech-pills-row">
+            <span class="tech-pill cyan">Pearson r</span>
+            <span class="tech-pill cyan">Spearman ρ</span>
+            <span class="tech-pill cyan">Kendall τ</span>
+            <span class="tech-pill cyan">Partial Correlation</span>
+            <span class="tech-pill cyan">Confounder Control</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipeline-step" id="step-4">
+        <div class="step-header" onclick="toggleStep('step-4')">
+          <div class="step-number mono">04</div>
+          <div class="step-meta">
+            <h3 class="step-title">Hypothesis Testing Battery</h3>
+            <p class="step-summary mono">Shapiro-Wilk · Mann-Whitney U · Kruskal-Wallis · Bonferroni · Cohen's d</p>
+          </div>
+          <div class="step-chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="step-expanded">
+          <p class="step-detail">Normality rejected for all 16 biomarkers (Shapiro-Wilk, p &lt; 0.001). That single test decision cascades through the entire analysis — non-parametric tests throughout. Bonferroni corrects for multiple comparisons. Cohen's d quantifies practical significance, not just statistical. 5 formal hypotheses. 5 supported.</p>
+          <div class="tech-pills-row">
+            <span class="tech-pill cyan">Shapiro-Wilk</span>
+            <span class="tech-pill cyan">Mann-Whitney U</span>
+            <span class="tech-pill cyan">Kruskal-Wallis</span>
+            <span class="tech-pill cyan">Bonferroni Correction</span>
+            <span class="tech-pill cyan">Cohen's d</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipeline-step" id="step-5">
+        <div class="step-header" onclick="toggleStep('step-5')">
+          <div class="step-number mono">05</div>
+          <div class="step-meta">
+            <h3 class="step-title">Dimensionality Reduction Suite</h3>
+            <p class="step-summary mono">PCA biplot · scree plot · t-SNE cluster maps</p>
+          </div>
+          <div class="step-chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="step-expanded">
+          <p class="step-detail">PC1 captures 41.2% of variance. The scree plot identifies a clear elbow at component 3. t-SNE at perplexity=30 produces three well-separated stage clusters in 2D — confirming the biomarker space encodes clinically meaningful disease stage information. The structure is in the data. You just need the right lens to see it.</p>
+          <div class="tech-pills-row">
+            <span class="tech-pill cyan">PCA Biplot</span>
+            <span class="tech-pill cyan">Scree Plot</span>
+            <span class="tech-pill cyan">t-SNE (perp=30)</span>
+            <span class="tech-pill cyan">Stage Clustering</span>
+            <span class="tech-pill cyan">41.2% PC1 Variance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipeline-step" id="step-6">
+        <div class="step-header" onclick="toggleStep('step-6')">
+          <div class="step-number mono">06</div>
+          <div class="step-meta">
+            <h3 class="step-title">Predictive Biomarker Ranking</h3>
+            <p class="step-summary mono">Random Forest (n=200) · Permutation Importance · Mutual Information · RFE</p>
+          </div>
+          <div class="step-chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="step-expanded">
+          <p class="step-detail">Three independent ranking methods cross-validated in a rank convergence heatmap. RF 5-fold CV R² = 0.81 ± 0.03. Top-5 consensus biomarkers selected for the EDI. The critical point: all three methods agreed on the same top 5. That convergence is the validation — not a single model's output.</p>
+          <div class="tech-pills-row">
+            <span class="tech-pill cyan">Random Forest n=200</span>
+            <span class="tech-pill cyan">Permutation Importance</span>
+            <span class="tech-pill cyan">Mutual Information</span>
+            <span class="tech-pill cyan">RFE</span>
+            <span class="tech-pill cyan">Rank Convergence Heatmap</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipeline-step" id="step-7">
+        <div class="step-header" onclick="toggleStep('step-7')">
+          <div class="step-number mono">07</div>
+          <div class="step-meta">
+            <h3 class="step-title">Clinical Insight Synthesis</h3>
+            <p class="step-summary mono">Early Detection Index · 5-fold AUC · 5 hypotheses · literature validation</p>
+          </div>
+          <div class="step-chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="step-expanded">
+          <p class="step-detail">The EDI is an original composite metric — not in any published paper. Logistic regression on top-5 permutation-importance biomarkers. Cross-validated AUC = 0.78 across all 5 folds. Replicates 3 peer-reviewed findings. The pipeline ends not with a model — but with a clinically actionable score and a literature review that validates it.</p>
+          <div class="tech-pills-row">
+            <span class="tech-pill cyan">Early Detection Index</span>
+            <span class="tech-pill cyan">5-fold Stratified CV</span>
+            <span class="tech-pill cyan">AUC = 0.78 ± 0.04</span>
+            <span class="tech-pill cyan">Literature Validation</span>
+            <span class="tech-pill cyan">3 Papers Replicated</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 5 — KEY FINDINGS
+══════════════════════════════════════════════════════════ -->
+<section id="findings" class="section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">What the Data Said</h2>
+      <p class="section-subtitle">Five hypotheses. Five supported. Three published papers replicated.</p>
+    </div>
+
+    <div class="findings-grid">
+
+      <div class="finding-card border-violet">
+        <div class="finding-number mono">FINDING 01</div>
+        <h3 class="finding-stat">"Jitter(%) → UPDRS"</h3>
+        <div class="finding-metric mono">Spearman ρ = 0.83</div>
+        <div class="finding-sig">p &lt; 0.001 &middot; Bonferroni corrected</div>
+        <div class="finding-replicate">"Replicates Little et al. 2009 (ρ = 0.86)"</div>
+      </div>
+
+      <div class="finding-card border-cyan">
+        <div class="finding-number mono">FINDING 02</div>
+        <h3 class="finding-stat">"HNR declines with severity"</h3>
+        <div class="finding-metric mono">Mann-Whitney U p &lt; 0.001</div>
+        <div class="finding-sig">Cohen's d = 0.89 (Large effect)</div>
+        <div class="finding-replicate">"Replicates Sakar et al. 2013"</div>
+      </div>
+
+      <div class="finding-card border-amber">
+        <div class="finding-number mono">FINDING 03</div>
+        <h3 class="finding-stat">"PPE escalates across all 3 stages"</h3>
+        <div class="finding-metric mono">Kruskal-Wallis H = 312.4</div>
+        <div class="finding-sig">p &lt; 0.001 &middot; All stages distinct</div>
+        <div class="finding-replicate">"Replicates Tsanas et al. 2010"</div>
+      </div>
+
+      <div class="finding-card border-green">
+        <div class="finding-number mono">FINDING 04 <span class="original-badge">ORIGINAL</span></div>
+        <h3 class="finding-stat">"Fast progressors: elevated baseline Shimmer(%)"</h3>
+        <div class="finding-metric mono">MWU p &lt; 0.01</div>
+        <div class="finding-sig">Cohen's d = 0.72</div>
+        <div class="finding-replicate original-text">"Novel NeuroTrace finding — not in any prior publication"</div>
+      </div>
+
+      <div class="finding-card border-violet">
+        <div class="finding-number mono">FINDING 05 <span class="original-badge">ORIGINAL EDI</span></div>
+        <h3 class="finding-stat">"EDI achieves AUC = 0.78 ± 0.04"</h3>
+        <div class="finding-metric mono">5-fold stratified CV</div>
+        <div class="finding-sig">Exceeds 0.75 threshold from 5 of 5 folds</div>
+        <div class="finding-replicate original-text">"Novel composite metric — no prior paper"</div>
+      </div>
+
+      <div class="finding-card border-teal">
+        <div class="finding-number mono">RF MODEL</div>
+        <h3 class="finding-stat">"R² = 0.81 ± 0.03"</h3>
+        <div class="finding-metric mono">200 trees · 5-fold CV</div>
+        <div class="finding-sig">random_state=42 · reproducible</div>
+        <div class="finding-replicate">"Top feature: Jitter(%) across all 3 ranking methods"</div>
+      </div>
+
+    </div>
+
+    <div class="findings-banner">
+      <span>3 published neurology papers replicated. 2 original contributions.</span>
+      <span class="banner-sep">·</span>
+      <span>All 5 formal hypotheses supported at α = 0.05.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 6 — THE EDI
+══════════════════════════════════════════════════════════ -->
+<section id="edi" class="section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">The Early Detection Index</h2>
+      <p class="section-subtitle">An original composite metric. Not in any published paper. Built here.</p>
+    </div>
+
+    <div class="edi-cols">
+      <div class="edi-left">
+        <div class="edi-card">
+          <h3 class="edi-card-title">What it is</h3>
+          <p class="edi-card-body">
+            A logistic regression classifier trained on the top 5 permutation-importance
+            biomarkers, normalised to [0,1]. The predicted probability of belonging to
+            early-stage PD (UPDRS &lt; 20) becomes a continuous clinical screening score.
+          </p>
+        </div>
+        <div class="edi-card">
+          <h3 class="edi-card-title">Why it matters</h3>
+          <p class="edi-card-body">
+            Individual biomarkers give thresholds. The EDI gives a probability. It integrates
+            complementary signal from jitter, shimmer, HNR, and nonlinear dynamics — the full
+            vocal spectrum of Parkinson's — into a single actionable number.
+          </p>
+        </div>
+        <div class="edi-card edi-card-clinical">
+          <h3 class="edi-card-title">What it means clinically</h3>
+          <div class="edi-threshold">
+            <span class="edi-thresh-dot green-dot"></span>
+            <span class="edi-thresh-range mono">EDI &gt; 0.70</span>
+            <span class="edi-thresh-meaning">Early stage profile. Clinical follow-up recommended.</span>
+          </div>
+          <div class="edi-threshold">
+            <span class="edi-thresh-dot amber-dot"></span>
+            <span class="edi-thresh-range mono">EDI 0.40–0.70</span>
+            <span class="edi-thresh-meaning">Moderate dysphonia. Reassessment in 3 months.</span>
+          </div>
+          <div class="edi-threshold">
+            <span class="edi-thresh-dot red-dot"></span>
+            <span class="edi-thresh-range mono">EDI &lt; 0.40</span>
+            <span class="edi-thresh-meaning">Significant degradation. Advanced progression risk.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDI Gauge -->
+      <div class="edi-right">
+        <div class="gauge-container" id="gauge-container">
+          <svg id="edi-gauge" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EDI Gauge showing AUC of 0.78">
+
+            <!-- Background arc segments -->
+            <!-- Red zone: 0 – 0.40 → 180° to ~108° (72° arc) -->
+            <path d="M 20 130 A 110 110 0 0 1 80.6 24.5" fill="none" stroke="#EF4444" stroke-width="18" stroke-linecap="butt" opacity="0.25"/>
+            <!-- Amber zone: 0.40 – 0.70 → ~108° to ~54° (54° arc) -->
+            <path d="M 80.6 24.5 A 110 110 0 0 1 189.4 24.5" fill="none" stroke="#F59E0B" stroke-width="18" stroke-linecap="butt" opacity="0.25"/>
+            <!-- Green zone: 0.70 – 1.0 → ~54° to 0° (54° arc) -->
+            <path d="M 189.4 24.5 A 110 110 0 0 1 240 130" fill="none" stroke="#10B981" stroke-width="18" stroke-linecap="butt" opacity="0.25"/>
+
+            <!-- Labels -->
+            <text x="15" y="150" font-family="JetBrains Mono, monospace" font-size="10" fill="#94A3B8">0</text>
+            <text x="78" y="18" font-family="JetBrains Mono, monospace" font-size="10" fill="#EF4444">0.40</text>
+            <text x="175" y="18" font-family="JetBrains Mono, monospace" font-size="10" fill="#10B981">0.70</text>
+            <text x="228" y="150" font-family="JetBrains Mono, monospace" font-size="10" fill="#94A3B8">1.0</text>
+
+            <!-- Needle (will be rotated by JS) -->
+            <g id="gauge-needle-group" transform="rotate(-90, 130, 130)">
+              <line x1="130" y1="130" x2="130" y2="35" stroke="#EDE9FE" stroke-width="2.5" stroke-linecap="round" />
+              <circle cx="130" cy="130" r="7" fill="#7C3AED"/>
+              <circle cx="130" cy="130" r="3" fill="#EDE9FE"/>
+            </g>
+
+            <!-- Centre value display -->
+            <text id="gauge-value-text" x="130" y="145" font-family="JetBrains Mono, monospace" font-size="22" font-weight="700" fill="#EDE9FE" text-anchor="middle">0.00</text>
+          </svg>
+          <p class="gauge-label mono">Cross-validated AUC = 0.78 ± 0.04 across 5 folds</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 7 — WHY DIFFERENT
+══════════════════════════════════════════════════════════ -->
+<section id="compare" class="section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Why NeuroTrace Is Different</h2>
+      <p class="section-subtitle">Not a project. A research product.</p>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="col-feature">Feature</th>
+            <th class="col-typical">Typical Student Project</th>
+            <th class="col-neuro">NeuroTrace</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-feature">Dataset source</td>
+            <td class="col-typical muted-cell">Kaggle / synthetic</td>
+            <td class="col-neuro neuro-cell">UCI MLR (cited 1,200+ times)</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Analysis depth</td>
+            <td class="col-typical muted-cell">1–2 methods</td>
+            <td class="col-neuro neuro-cell">7-layer pipeline</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Statistical rigour</td>
+            <td class="col-typical muted-cell">Pearson only</td>
+            <td class="col-neuro neuro-cell">MWU + KW + Bonferroni + Cohen's d</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Normality testing</td>
+            <td class="col-typical muted-cell">Skipped</td>
+            <td class="col-neuro neuro-cell">Shapiro-Wilk → non-parametric choice</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Feature importance</td>
+            <td class="col-typical muted-cell">1 method</td>
+            <td class="col-neuro neuro-cell">3 independent methods cross-validated</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Patient-level analysis</td>
+            <td class="col-typical muted-cell">Aggregate only</td>
+            <td class="col-neuro neuro-cell">Per-patient OLS trajectory fitting</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Original contribution</td>
+            <td class="col-typical muted-cell">None</td>
+            <td class="col-neuro neuro-cell">EDI — novel composite metric</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Literature validation</td>
+            <td class="col-typical muted-cell">None</td>
+            <td class="col-neuro neuro-cell">3 peer-reviewed papers replicated</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Explainability</td>
+            <td class="col-typical muted-cell">None</td>
+            <td class="col-neuro neuro-cell">Permutation importance + rank convergence</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Deliverable format</td>
+            <td class="col-typical muted-cell">Notebook</td>
+            <td class="col-neuro neuro-cell">Research paper + notebook + live tool + website</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare-statements">
+      <p class="compare-stmt">"Your analysis is a table. This is a clinical pipeline."</p>
+      <p class="compare-stmt">"Your findings are conclusions. These are hypotheses, tested."</p>
+      <p class="compare-stmt">"Your project lives in a notebook. This lives at a URL."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 8 — TECH STACK
+══════════════════════════════════════════════════════════ -->
+<section id="stack" class="section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Under the Hood</h2>
+      <p class="section-subtitle">Production-grade tooling. Research-grade methodology.</p>
+    </div>
+
+    <div class="stack-rows">
+      <div class="stack-row-label">Core</div>
+      <div class="stack-row tech-pill-row stagger-row">
+        <span class="tpill">Python 3.12</span>
+        <span class="tpill">pandas 3.0</span>
+        <span class="tpill">NumPy 2.4</span>
+        <span class="tpill">SciPy 1.17</span>
+        <span class="tpill">scikit-learn 1.8</span>
+      </div>
+
+      <div class="stack-row-label">Analysis</div>
+      <div class="stack-row tech-pill-row stagger-row">
+        <span class="tpill">Random Forest</span>
+        <span class="tpill">PCA + t-SNE</span>
+        <span class="tpill">KNNImputer</span>
+        <span class="tpill">RobustScaler</span>
+        <span class="tpill">NetworkX</span>
+      </div>
+
+      <div class="stack-row-label">Statistics</div>
+      <div class="stack-row tech-pill-row stagger-row">
+        <span class="tpill">Shapiro-Wilk</span>
+        <span class="tpill">Mann-Whitney U</span>
+        <span class="tpill">Kruskal-Wallis</span>
+        <span class="tpill">Bonferroni</span>
+        <span class="tpill">Cohen's d</span>
+      </div>
+    </div>
+
+    <p class="stack-footer mono">
+      17 publication-quality inline figures &middot;
+      5 saved ML model artefacts &middot;
+      Full reproducibility: random_state=42 throughout
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 9 — CLOSER
+══════════════════════════════════════════════════════════ -->
+<section id="closer" class="section reveal closer-section">
+  <div class="container closer-inner">
+    <blockquote class="closer-quote">
+      <p class="closer-quote-line">"The voice carries what the clinic cannot see."</p>
+      <p class="closer-quote-line closer-quote-accent">NeuroTrace listens.</p>
+    </blockquote>
+
+    <div class="closer-meta">
+      <p class="closer-author mono">Deven Kishor Mane &middot; 2023-B-10072004 &middot; BCA-AIML Final Year &middot; Seamedu, ADYPU Pune &middot; March 2026</p>
+      <p class="closer-award mono">Seamedu Awards 2026 &middot; Data Analytics Excellence Award</p>
+    </div>
+
+    <div class="closer-links">
+      <a href="https://drive.google.com/file/d/1XJY1zd30tap_SvVkTiiWPuyJYvAE9MuT/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="closer-btn closer-btn-violet">View Research Paper</a>
+      <a href="https://github.com/Deven-Mane1018/Neuro-Trace-Data-Analytics" target="_blank" rel="noopener noreferrer" class="closer-btn closer-btn-outline">View GitHub Notebook</a>
+    </div>
+
+    <p class="closer-footer">
+      Built on real clinical data. Validated against peer-reviewed literature.
+      Designed to make neurological monitoring accessible to 10 million people.
+    </p>
+  </div>
+</section>
+
+<script src="main.js"></script>
+</body>
+</html>
