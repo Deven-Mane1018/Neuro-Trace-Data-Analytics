@@ -19,7 +19,7 @@ The pipeline covers the full arc of a data science research study:
 
 This repository contains the **interactive showcase website** for the project, designed for a 3–3.5 minute video walkthrough narration submitted to the Seamedu Awards 2026.
 
-**→ [Live Site](#)** · **→ [Research Paper](https://drive.google.com/file/d/1XJY1zd30tap_SvVkTiiWPuyJYvAE9MuT/view?usp=sharing)** · **→ [GitHub Notebook](https://github.com/Deven-Mane1018/Neuro-Trace-Data-Analytics)**
+**→ [Live Site](https://neurotrace-showcase-28wgq0hrn-devenmane2017-1070s-projects.vercel.app)** · **→ [Research Paper](https://drive.google.com/file/d/1XJY1zd30tap_SvVkTiiWPuyJYvAE9MuT/view?usp=sharing)** · **→ [GitHub Notebook](https://github.com/Deven-Mane1018/Neuro-Trace-Data-Analytics)**
 
 ---
 
@@ -159,7 +159,7 @@ Simply open `index.html` in any modern browser. No build step or server required
 
 - **Research Paper**: [Google Drive](https://drive.google.com/file/d/1XJY1zd30tap_SvVkTiiWPuyJYvAE9MuT/view?usp=sharing)
 - **GitHub Repository**: [Neuro-Trace-Data-Analytics](https://github.com/Deven-Mane1018/Neuro-Trace-Data-Analytics)
-- **Live Site**: Deployed on Vercel
+- **Live Site**: [neurotrace-showcase.vercel.app](https://neurotrace-showcase-28wgq0hrn-devenmane2017-1070s-projects.vercel.app)
 
 ---
 
