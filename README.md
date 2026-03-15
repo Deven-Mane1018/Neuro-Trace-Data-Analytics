@@ -159,7 +159,7 @@ Simply open `index.html` in any modern browser. No build step or server required
 
 - **Research Paper**: [Google Drive](https://drive.google.com/file/d/1XJY1zd30tap_SvVkTiiWPuyJYvAE9MuT/view?usp=sharing)
 - **GitHub Repository**: [Neuro-Trace-Data-Analytics](https://github.com/Deven-Mane1018/Neuro-Trace-Data-Analytics)
-- **Live Site**: [neurotrace-showcase.vercel.app](https://neurotrace-showcase-28wgq0hrn-devenmane2017-1070s-projects.vercel.app)
+- **Live Site**: [Project Walkthrough](https://neurotrace-showcase.vercel.app/)
 
 ---
 
@@ -167,7 +167,7 @@ Simply open `index.html` in any modern browser. No build step or server required
 
 **Deven Kishor Mane**
 BCA — Artificial Intelligence & Machine Learning
-Roll No: 2023-B-10072004
+URN: 2023-B-10072004
 Seamedu School of Pro-Expressionism, ADYPU Pune
 March 2026
 
